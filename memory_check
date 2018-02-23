@@ -5,7 +5,7 @@ function print_help(){
          Options:  
          -c critical threshold 
          -w warning threshold 
-         -e email address (optional)'
+         -e email address'
    echo "$HELP"
 }
 
@@ -24,7 +24,7 @@ while getopts ":c:w:e:" OPTIONNAME; do
 done
 
 # check required parameters
-if [ -z "$CRIT" ] || [ -z "$WARN" ] 
+if [ -z "$CRIT" ] || [ -z "$WARN" ] || [ -z "$EMAIL" ]
 then
    print_help
    exit 255
@@ -42,15 +42,16 @@ TOTAL_MEMORY=$(free | grep Mem: | awk '{print $2}')
 USED_MEMORY=$(free | grep Mem: | awk '{print $3}')
 PERCENT_MEMORY=$(echo "$USED_MEMORY / $TOTAL_MEMORY * 100" | bc -l)
 PERCENT_MEMORY=$(echo "$PERCENT_MEMORY / 1" | bc)
-#echo "$TOTAL_MEMORY $USED_MEMORY $PERCENT_MEMORY"
+INFO="TOTAL:$TOTAL_MEMORY USED:$USED_MEMORY $PERCENT_MEMORY%"
 
 if [ $PERCENT_MEMORY -ge $WARN ] && [ $PERCENT_MEMORY -lt $CRIT ]; then
-   echo "warn"
+   echo "WARNING $INFO"
    exit 1
 elif [ $PERCENT_MEMORY -ge $CRIT ]; then
-   echo "crit"
+   echo "CRITICAL $INFO"
+   echo "$INFO" | mail -s "`date +"%Y%m%d %H:%M"` - memory check - critical" $EMAIL
    exit 2
 else
-   echo "ok"
+   echo "OK $INFO"
    exit 0
 fi
