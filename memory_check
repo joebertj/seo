@@ -1,0 +1,56 @@
+#!/bin/bash
+
+function print_help(){
+   HELP="USAGE: $0 "'-c crit -w warn -e email 
+         Options:  
+         -c critical threshold 
+         -w warning threshold 
+         -e email address (optional)'
+   echo "$HELP"
+}
+
+while getopts ":c:w:e:" OPTIONNAME; do
+    case "${OPTIONNAME}" in
+        c) 
+            CRIT=${OPTARG} ;;
+        w) 
+            WARN=${OPTARG} ;;
+        e)
+            EMAIL="${OPTARG}" ;;
+        [?])
+            print_help
+            exit 255 ;;
+    esac
+done
+
+# check required parameters
+if [ -z "$CRIT" ] || [ -z "$WARN" ] 
+then
+   print_help
+   exit 255
+fi
+
+#check WARN less than CRIT
+if [ "$CRIT" -le "$WARN" ] 
+then
+   echo "Critical threshold must be greater than warn"
+   print_help
+   exit 255
+fi
+
+TOTAL_MEMORY=$(free | grep Mem: | awk '{print $2}')
+USED_MEMORY=$(free | grep Mem: | awk '{print $3}')
+PERCENT_MEMORY=$(echo "$USED_MEMORY / $TOTAL_MEMORY * 100" | bc -l)
+PERCENT_MEMORY=$(echo "$PERCENT_MEMORY / 1" | bc)
+#echo "$TOTAL_MEMORY $USED_MEMORY $PERCENT_MEMORY"
+
+if [ $PERCENT_MEMORY -ge $WARN ] && [ $PERCENT_MEMORY -lt $CRIT ]; then
+   echo "warn"
+   exit 1
+elif [ $PERCENT_MEMORY -ge $CRIT ]; then
+   echo "crit"
+   exit 2
+else
+   echo "ok"
+   exit 0
+fi
