@@ -49,6 +49,8 @@ if [ $PERCENT_MEMORY -ge $WARN ] && [ $PERCENT_MEMORY -lt $CRIT ]; then
    exit 1
 elif [ $PERCENT_MEMORY -ge $CRIT ]; then
    echo "CRITICAL $INFO"
+   #INFO=$(ps aux --sort -rss | head -10)
+   INFO=$(ps -eo pid,pmem,rss,command --sort -rss | head -10)
    echo "$INFO" | mail -s "`date +"%Y%m%d %H:%M"` - memory check - critical" $EMAIL
    exit 2
 else
