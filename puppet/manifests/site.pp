@@ -1,4 +1,1 @@
-include install_packages
-include add_user
-include add_files
-include add_cron
+include install_packages, add_user, add_cron, add_zone
