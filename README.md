@@ -1,4 +1,5 @@
 # seo
 
-cd puppet
-./puppet-masterless.sh
+### Quick Guide
+`cd puppet`
+`./puppet-masterless.sh`
