@@ -1,5 +1,7 @@
 # seo
 
 ### Quick Guide
-`cd puppet`
-`./puppet-masterless.sh`
+```
+cd puppet
+./puppet-masterless.sh
+```
