@@ -56,7 +56,7 @@ class seo {
   } 
 
   cron { 'mmc':
-     command => '/home/monitor/src/my_memory_check',
+     command => '/home/monitor/src/my_memory_check -w 80 -c 90 -e joebertj@gmail.com',
      ensure => 'present',
      minute => '*/10',
      user => 'monitor',
