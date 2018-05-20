@@ -1,4 +1,4 @@
-#!/home/kenchlig/bin/python3.5
+#!/usr/bin/python3
 
 import cgi
 import subprocess
