@@ -7,7 +7,7 @@ drow = form.getvalue("word").lower()
 lendrow=len(drow)
 ldrow=list(drow)
 ldrow.sort()
-words=open("/home/kenchlig/words","r")
+words=open("./words","r")
 print("<ul>")
 for word in words:
    lenword=len(word)-1

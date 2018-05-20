@@ -7,7 +7,7 @@ drow = form.getvalue("word").lower()
 lendrow=len(drow)
 ldrow=list(drow)
 ldrow.sort()
-words=open("/home/kenchlig/words","r")
+words=open("./words","r")
 for word in words:
    lenword=len(word)-1
    if(lenword>2 and lendrow>=lenword):
