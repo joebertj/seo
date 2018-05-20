@@ -2,12 +2,13 @@
 
 import cgi
 import subprocess
+workdir = "/home/joebert/kenchlightyear.com/ex.kenchlightyear.com/"
 print("Content-Type: text/html\n")
 form = cgi.FieldStorage(environ={'REQUEST_METHOD':'POST'})
 email = form.getvalue("email")
-cmd = ['mail', '-s', 'Resume of Joebert Jacaba', '-a', '/home/kenchlig/ex.kenchlightyear.com/resume.doc', email]
-filename = "/home/kenchlig/ex.kenchlightyear.com/body"
-file = open(filename, "r")
-p = subprocess.Popen(cmd, stdin=file)
+mail = [ 'mail', '-s', 'Resume of Joebert Jacaba', '-r', 'joebertj@kenchlightyear.com', '--', email ]
+body = [ 'cat', workdir + 'bodyattach' ]
+bodyproc = subprocess.Popen(body, stdout=subprocess.PIPE)
+mailproc = subprocess.Popen(mail, stdin=bodyproc.stdout)
 print("Your email has been delivered. It should arrive shortly.")
 print('<p><a href="/">Go back</a></p>')
